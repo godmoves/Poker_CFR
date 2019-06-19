@@ -43,7 +43,7 @@ where <a href="https://www.codecogs.com/eqnedit.php?latex=ha" target="_blank"><i
 We can define regret in our setting to be:
 
 <div align="center">
-<a href="https://www.codecogs.com/eqnedit.php?latex=R_{i,imm}^T(I)&space;=&space;\frac{1}{T}\max_{a&space;\in&space;A(I)}\sum_{t=1}^T(\hat{u}_{|I&space;\to&space;a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R_{i,imm}^T(I)&space;=&space;\frac{1}{T}\max_{a&space;\in&space;A(I)}\sum_{t=1}^T(\hat{u}_{|I&space;\to&space;a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" title="R_{i,imm}^T(I) = \frac{1}{T}\max_{a \in A(I)}\sum_{t=1}^T(\hat{u}_{|I \to a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=R_{i,imm}^T(I)&space;=&space;\frac{1}{T}\max_{a&space;\in&space;A(I)}\sum_{t=1}^T(\hat{u}_{i|I&space;\to&space;a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R_{i,imm}^T(I)&space;=&space;\frac{1}{T}\max_{a&space;\in&space;A(I)}\sum_{t=1}^T(\hat{u}_{i|I&space;\to&space;a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" title="R_{i,imm}^T(I) = \frac{1}{T}\max_{a \in A(I)}\sum_{t=1}^T(\hat{u}_{i|I \to a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" /></a>
 </div>
 
 which called **Immediate Counterfactual Regret**.
@@ -54,4 +54,4 @@ Similarly, Immediate Counterfactual Regret of not playing action <a href="https:
 <a href="https://www.codecogs.com/eqnedit.php?latex=R_{i,imm}^T(I,a)&space;=&space;\frac{1}{T}\sum_{t=1}^T(\hat{u}_{i|I&space;\to&space;a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R_{i,imm}^T(I,a)&space;=&space;\frac{1}{T}\sum_{t=1}^T(\hat{u}_{i|I&space;\to&space;a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" title="R_{i,imm}^T(I,a) = \frac{1}{T}\sum_{t=1}^T(\hat{u}_{i|I \to a}(\sigma_H^t,I)-\hat{u}_i(\sigma_H^t,I))" /></a>
 </div>
 
-For more information about these concepts, you can refer to [this post](https://int8.io/counterfactual-regret-minimization-for-poker-ai/).
+For more information about these concepts, you can refer to the [original paper](https://poker.cs.ualberta.ca/publications/NIPS07-cfr.pdf) and [this post](https://int8.io/counterfactual-regret-minimization-for-poker-ai/).
