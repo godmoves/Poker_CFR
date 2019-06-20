@@ -157,7 +157,7 @@ class ExtensiveGame:
 
         return results
 
-    def complete_strategy_uniformly(self, strategy):
+    def complete_strategy_uniformly(self, strategy, verbose=True):
         """ Given a partial strategy, i.e. a dictionary from a subset of the
         info_set_ids to probabilities over actions in those information sets,
         complete the dictionary by assigning uniform probability distributions
@@ -171,6 +171,6 @@ class ExtensiveGame:
                 new_strategy[info_set_id] = {
                     a: 1.0 / float(len(actions)) for a in actions}
                 num_missing += 1
-        if num_missing > 0:
+        if num_missing > 0 and verbose:
             print("Completed strategy at {} information sets.".format(num_missing))
         return new_strategy

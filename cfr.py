@@ -7,7 +7,7 @@ import numpy as np
 import best_response
 
 
-def cfr(game, num_iters=10000):
+def cfr(game, num_iters=10000, info_iters=100):
     # regrets is a dictionary where the keys are the information sets and values
     # are dictionaries from actions available in that information set to the
     # counterfactual regret for not playing that action in that information set.
@@ -27,13 +27,12 @@ def cfr(game, num_iters=10000):
     average_strategy_snapshot = None
 
     # Each information set is uniquely identified with an action tuple.
-    # values = {1: [], 2: []}
     for t in range(num_iters):
         for i in [1, 2]:
             cfr_recursive(game, game.game.root, i, t, 1.0, 1.0, regrets,
                           action_counts, strategy_t, strategy_t_1)
 
-        if (t % 100 == 0) and (average_strategy is not None):
+        if (t % info_iters == 0) and (average_strategy is not None):
             print("t: {}".format(t))
             if average_strategy_snapshot is not None:
                 snapshot_distance = compare_strategies(average_strategy, average_strategy_snapshot)
@@ -97,11 +96,11 @@ def compare_strategies(s1, s2):
 # information set label for that game state, which uniquely identifies the
 # information set and is the same for all states in that information set.
 def cfr_recursive(game, node, i, t, pi_1, pi_2, regrets, action_counts,
-                  strategy_t, strategy_t_1):
+                  strategy_t, strategy_t_1, cfr_plus=False):
     # If the node is terminal, just return the payoffs
     if game.is_terminal(node):
         return game.payoffs(node)[i]
-    # If the next player is chance, then sample the chance action
+    # If the next player is chance, then sample one chance action
     elif game.which_player(node) == 0:
         a = game.sample_chance_action(node)
         return cfr_recursive(
@@ -129,12 +128,12 @@ def cfr_recursive(game, node, i, t, pi_1, pi_2, regrets, action_counts,
         if player == 1:
             values_Itoa[a] = cfr_recursive(
                 game, node.children[a], i, t, strategy_t[information_set][a] *
-                pi_1, pi_2, regrets, action_counts, strategy_t, strategy_t_1)
+                pi_1, pi_2, regrets, action_counts, strategy_t, strategy_t_1, cfr_plus)
         else:
             values_Itoa[a] = cfr_recursive(
                 game, node.children[a], i, t, pi_1,
                 strategy_t[information_set][a] * pi_2, regrets, action_counts,
-                strategy_t, strategy_t_1)
+                strategy_t, strategy_t_1, cfr_plus)
         value += strategy_t[information_set][a] * values_Itoa[a]
 
     # Update regrets now that we have computed the counterfactual value of the
@@ -148,6 +147,8 @@ def cfr_recursive(game, node, i, t, pi_1, pi_2, regrets, action_counts,
             pi_minus_i = pi_1 if i == 2 else pi_2
             pi_i = pi_1 if i == 1 else pi_2
             regrets[information_set][a] += (values_Itoa[a] - value) * pi_minus_i
+            if cfr_plus:
+                regrets[information_set][a] = max(0.0, regrets[information_set][a])
             if information_set not in action_counts:
                 action_counts[information_set] = {ad: 0.0 for ad in available_actions}
             action_counts[information_set][a] += pi_i * strategy_t[information_set][a]
@@ -166,7 +167,7 @@ def compute_regret_matching(regrets):
     actions uniformly.
     """
 
-    # If no regrets are positive, just return the uniform probability
+    # If max regret is not positive, just return the uniform probability
     # distribution on available actions.
     if max([v for k, v in regrets.items()]) <= 0.0:
         return {a: 1.0 / float(len(regrets)) for a in regrets}

@@ -1,7 +1,7 @@
 # coding: utf-8
 # This implements One Card Poker.
 
-from deepstack.extensive_game import ExtensiveGame, ExtensiveGameNode
+from extensive_game import ExtensiveGame, ExtensiveGameNode
 
 
 class OneCardPoker(ExtensiveGame):
